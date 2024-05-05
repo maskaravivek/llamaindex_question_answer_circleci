@@ -1,18 +1,25 @@
-from  query import answer_query
+from app import app
 
 import unittest
 
-class TestQuestionAnswerAgent(unittest.TestCase):
+
+class TestQAAPI(unittest.TestCase):
+    def setUp(self):
+        self.app = app
+        self.client = self.app.test_client
+
     def test_valid_response(self):
-        
-        response = answer_query("What did the author do growing up?")
-        
+
+        request = {"query": "What did the author do growing up?"}
+
+        response = self.client().post("/answer", data=request)
+
         self.assertIsNotNone(response)
-        self.assertTrue(len(str(response)) > 0)
-        
+        self.assertTrue(len(str(response.data)) > 0)
+
     def test_invalid_response(self):
-        response = answer_query("")
-        self.assertIsNone(response)
+        request = {"query": ""}
+
+        response = self.client().post("/answer", data=request)
         
-if __name__ == "__main__":
-    unittest.main()
+        self.assertNotEqual(response.status_code, 200)

@@ -34,6 +34,3 @@ def answer_query(query):
     response = query_engine.query(query)
     
     return response
-
-if __name__ == "__main__":
-    print(answer_query("What did the author do growing up?"))
